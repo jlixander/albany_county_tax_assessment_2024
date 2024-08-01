@@ -100,13 +100,14 @@ Lastly, both 2023 and 2024 were merged together using an inner join on the parce
 
 #### Handling Missing Values
 
-For data analysis to be accurate, missing values have to be handled. This allows for appropriate calculations of derived values and for a fair comparison across time periods. No missing values were found, however, around 540 observations where found to have one or missing column values. A fraction of these observations were dropped, leaving behind 352 observations with missing 'Property Type Code', which identifies the type of parcel (E.g.: 1 Family Res).
+For data analysis to be accurate, missing values have to be handled. This allows for appropriate calculations of derived values and for a fair comparison across time periods. No missing values were found, however, around 540 observations where found to have one or more empty string column values. A fraction of these observations were dropped, leaving behind 352 observations with missing 'Property Type Code', which identifies the type of parcel (E.g.: 1 Family Res).
 
 #### Computing Percent Change In Property Values
 
-To better understand the differences in the property assessment rolls, it is prudent to understand at what rates have *City Tax*, *County Tax*, *Schol Tax*, and *Full Market Value* have changed for each property. Discrete magnitudes (Thousands of dollar Increase/Decrease) does not provide a clear comparison relative to other properties. As such, the percent change is calculated. This provides a standard scale to compare across parcels in an intuitive way. For example, if the initial home assessment was $100k and is now $140k, this means a 40% increase. If we compare it to a $600K property, a $40k increase would only mean a 6.67% increase. This clearly shows that the former had a much higher tax hike!
+To better understand the differences in the property assessment rolls, it is prudent to understand magnitude of change for *City Tax*, *County Tax*, *Schol Tax*, and *Full Market Value*. Discrete magnitudes (Thousands of dollar Increase/Decrease) does not provide a clear comparison relative to other properties. As such, the percent change is calculated. This provides a standard scale to compare across parcels in an intuitive way. For example, if the initial home assessment was $100k and is now $140k, this means a 40% increase. If we compare it to a $600K property, a $40k increase would only mean a 6.67% increase. This clearly shows that the former had a much higher assessment hike!
 
 Percent Change is calculated using the formula below:
+
 $$
 \text{Percentage Change} = \left( \frac{\text{Value in 2024} - \text{Value in 2023}}{\text{Value in 2023}} \right) \times 100
 $$
