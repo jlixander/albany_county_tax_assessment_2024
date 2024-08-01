@@ -37,7 +37,9 @@ The main data used for this study are the 2023 and 2024 assessment rolls, which 
 * Census: https://www.census.gov/programs-surveys/acs/data/data-via-api.html
 
 __Limitations of the data:__
-The parsing method used in this study failed to capture every individual parcel in the tax assesment rolls. Consequently, only parcels that appear in the 2023 and 2024 parsed data results are included in the analysis. This approach ensures a consistent basis for comparing data across different segments and years, allowing for more accurate and reliable comparisons between populations and time periods. However, it is unknown whether the missing observations are due to an inherent property characteristic that makes it difficult for the parsing methodology to capture. As such, there may be some bias in this analysis.
+The parsing method used in this study failed to capture every individual parcel in the tax assesment rolls. Consequently, only detectable parcels that appear in both the 2023 and 2024 results are included in the analysis. In addition, data exploration revealed that some detected parcels did not return other field values such as *Full Market Value* and *School Tax Value*. The total amount of parcels yielded by the parsing script is 28,963. Of these, 159 observations were removed due to lack of missing values. 
+  
+This approach ensures a consistent basis for comparing data across different segments and years, allowing for more accurate and reliable comparisons between populations and time periods. However, it is unknown whether the missing observations are due to an inherent property characteristic which makes it difficult for the parsing methodology to capture. As such, there may be some bias in this analysis.
 
 The analyis will be updated if tabular datasets for both 2023 and 2024 property assessement rolls are made public.
 
@@ -81,7 +83,33 @@ Source: [U.S. Census Bureau, 2024](https://www2.census.gov/programs-surveys/cps/
 
 #### PDF Data Parsing
 
+To extract information from the assessment roll PDF documents, regular expressions were employed. To start, each PDF document was loaded and converted to a single string text. Once in text format, each page header was removed, followed by the delimiting of each parcel record. The optimal delimiter was identified to be the parcel number embedded in a full text line of asterisks.
 
+From there, each piece of information was extracted using the following regular expression patterns:
+| Pattern Name               | Regular Expression Pattern                                                                                         | Description                      |
+|----------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------------|
+| `parcelnum_pattern`        | `(?:\d{1,2}\.\d{1,2}-\d*?-)(?:(?:\d{1,2}\.\d{1,2})\|(?:\d{1,2}))`                                                   | Finds unique parcel identifier       |
+| `address_pattern`          | `.+\s+(?=(?:HOMESTEAD PARCEL\|NON-HOMESTEAD PARCEL))`                                                               | Finds Property Address            |
+| `property_type_pattern`    | `(?:(?:\d{1,2}\.\d{1,2}-\d*?-)(?:(?:\d{1,2}\.\d{1,2})\|(?:\d{1,2})))(?: \\\\n \\\\n +)(\d{3} )`                     | Finds Property Type Code (e.g.: 1 Family Res)      |
+| `county_tax_pattern`       | `(?:COUNTY TAXABLE VALUE\s+)(\b(\d{1,4}(,\d{3})+)\b\|[1-9]\d+\|0)`                                                   | Finds the assigned County Taxable Value   |
+| `city_tax_pattern`         | `(?:CITY TAXABLE VALUE\s+)(\b(\d{1,4}(,\d{3})+)\b\|[1-9]\d+\|0)`                                                     | Finds the assigned City Taxable Value     |
+| `full_market_value_pattern`| `(?:FULL MARKET VALUE\s+)(\b(\d{1,4}(,\d{3})+)\b\|[1-9]\d+)`                                                        | Finds the assigned Full Market Property Value  |
+| `school_tax_pattern`       | `(?:SCHOOL TAXABLE VALUE\s+)(\b(\d{1,4}(,\d{3})+)\b\|[1-9]\d+\|0)`                                                   | Finds the assigned County Taxable Value   |
+
+Lastly, both 2023 and 2024 were merged together using an inner join on the parcel number. Essentially, an __inner join__ yields a combined dataset where only records found in both 2023 and 2024 are returned. See the *About The Data* section for an explanation of possible limitations of this approach.
+
+#### Handling Missing Values
+
+For data analysis to be accurate, missing values have to be handled. This allows for appropriate calculations of derived values and for a fair comparison across time periods. No missing values were found, however, around 540 observations where found to have one or missing column values. A fraction of these observations were dropped, leaving behind 352 observations with missing 'Property Type Code', which identifies the type of parcel (E.g.: 1 Family Res).
+
+#### Computing Percent Change In Property Values
+
+To better understand the differences in the property assessment rolls, it is prudent to understand at what rates have *City Tax*, *County Tax*, *Schol Tax*, and *Full Market Value* have changed for each property. Discrete magnitudes (Thousands of dollar Increase/Decrease) does not provide a clear comparison relative to other properties. As such, the percent change is calculated. This provides a standard scale to compare across parcels in an intuitive way. For example, if the initial home assessment was $100k and is now $140k, this means a 40% increase. If we compare it to a $600K property, a $40k increase would only mean a 6.67% increase. This clearly shows that the former had a much higher tax hike!
+
+Percent Change is calculated using the formula below:
+$$
+\text{Percentage Change} = \left( \frac{\text{Value in 2024} - \text{Value in 2023}}{\text{Value in 2023}} \right) \times 100
+$$
 
 ## Findings
 
