@@ -23,7 +23,7 @@ There are two questions to formulate hypothesis' from:
     - Null Hypothesis (H0): There is no significant difference in property tax increase across income categories.
     - Alternative Hypothesis (H1): There is significant difference in property tax increase across income categories.   
 
-3. If the null hypothesis is accepted for question 1 and 2. How does the city of albany property tax changes look like compared to surrounding towns in the County of Albany? 
+3. If the null hypothesis is accepted for question 1 and 2. How do the City of Albany property assessment roll changes compare to surrounding towns in the County of Albany? 
 
 
 
