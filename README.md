@@ -20,8 +20,8 @@ There are two questions to formulate hypothesis' from:
     - Alternative Hypothesis (H1): There is significant difference in property tax increase by geographical area.
 
 2. If property taxes did not increase at the same rate, was it different for low-income communities? _(Low-Income Communities to be identified using Census Data)_
-    - Null Hypothesis (H0): There is no significant difference in property tax increase.
-    - Alternative Hypothesis (H1): There is significant difference in property tax increase.   
+    - Null Hypothesis (H0): There is no significant difference in property tax increase across income categories.
+    - Alternative Hypothesis (H1): There is significant difference in property tax increase across income categories.   
 
 3. If the null hypothesis is accepted for question 1 and 2. How does the city of albany property tax changes look like compared to surrounding towns in the County of Albany? 
 
